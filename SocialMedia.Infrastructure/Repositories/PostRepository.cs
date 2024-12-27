@@ -1,23 +1,21 @@
-﻿using SocialMedia.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using SocialMedia.Core.Entities;
+using SocialMedia.Core.Interfaces;
+using SocialMedia.Infrastructure.Data;
 
 namespace SocialMedia.Infrastructure.Repositories
 {
-    public class PostRepository
+    public class PostRepository : IPostRepository
     {
-        public IEnumerable<Post> GetPosts()
+        private readonly SocialMediaContext _context;
+        public PostRepository(SocialMediaContext context)
         {
-            var posts = Enumerable.Range(1, 19).Select( p => new Post { 
-                PostId = p,
-                Description = $"Descripcion {p}",
-                Date = DateTime.Now,
-                ImageUrl = $"https://placehold.co/{p*50}x300",
-                UserId = p++,
-            });
+            _context = context;
+        }
+
+        public async Task<IEnumerable<Publicacion>> GetPosts() 
+        {
+            var posts = await _context.Publicacions.ToListAsync();
 
             return posts;
         }

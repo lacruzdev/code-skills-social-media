@@ -1,8 +1,19 @@
+using Microsoft.EntityFrameworkCore;
+using SocialMedia.Core.Interfaces;
+using SocialMedia.Infrastructure.Data;
+using SocialMedia.Infrastructure.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
+// Dependency Injection.
+builder.Services.AddTransient<IPostRepository, PostRepository>();
+builder.Services.AddDbContext<SocialMediaContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SocialMedia"))
+);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
